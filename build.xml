@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="jhlir" default="distrib">
+
+  <!-- property definitions -->
+
+  <dirname property="content.root" file="${ant.file.imported}"/>
+  <property file="${content.root}/imported.properties"/>
+
+  <property name="build.dir" value="${content.root}/classes"/>
+  <property name="lib.dir" location="${content.root}/lib"/>
+  <property name="javadoc.dir" value="${content.root}/doc"/>
+  <property name="server.algo.ip" value="85.214.22.10"/>
+  <property name="server.algo.login" value="rjavaweb"/>
+  <property name="server.algo.pass" value="${passwd.algof}"/>
+  <property name="server.algo.htdocs" value="/var/www/rjavaclient/jhlir/doc/"/>
+
+
+  <path id="sourcepath">
+    <dirset dir="${content.root}">
+      <include name="src"/>
+    </dirset>
+  </path>
+
+
+  <!-- Compiler options -->
+
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value="-target 1.5 -source 1.5"/>
+  <property name="compiler.max.memory" value="128m"/>
+
+  <!-- Project Libraries -->
+
+    <path id="libraries.classpath">
+        <fileset dir="${lib.dir}">
+        	<include name="afcommons.jar"/>
+        	<include name="commons-lang-2.4.jar"/>
+            <include name="commons-collections-3.2.1.jar"/>
+            <include name="junit-4.4.jar"/>
+            <include name="biocepunsigned.jar"/>
+            <include name="REngine.jar"/>
+            <include name="JRIEngine.jar"/>
+            <include name="jRegistryKey.jar"/>
+        </fileset>
+    </path>
+
+   <target name="clean" description="cleanup all">
+      <delete dir="${build.dir}"/>
+    </target>
+
+
+
+    <target name="compile" depends="clean">
+  	<mkdir dir="${build.dir}"/>
+    <javac destdir="${build.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+           memorymaximumsize="${compiler.max.memory}" fork="true" excludes="biocep/**,junit/**,test/**,rengine/**">
+      <compilerarg line="${compiler.args}"/>
+      <classpath refid="libraries.classpath"/>
+      <src refid="sourcepath"/>
+    </javac>
+  </target>
+
+
+  <target name="distrib" depends="compile">
+
+    <jar destfile="${content.root}/jhlir.jar">
+    	<fileset dir="${build.dir}">
+            <include name="*/**"/>
+        </fileset>
+    </jar>
+  </target>
+
+    <target name="javadoc">
+        <javadoc access="public" author="true" destdir="doc" doctitle="Java High-Level Interface to R"
+                 nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false"
+                 packagenames="org.af.jhlir.tools,org.af.jhlir.call,org.af.jhlir.packages"
+                 source="1.6" sourcepath="src" splitindex="true" use="true" version="true">
+
+            <classpath refid="libraries.classpath"/>
+            <link href="http://java.sun.com/javase/6/docs/api/"/>
+            <link href="http://www.algorithm-forge.com/afcommons/doc/"/>
+        </javadoc>
+
+    	<scp trust="true" todir="${server.algo.login}:${server.algo.pass}@${server.algo.ip}:${server.algo.htdocs}" verbose="true">
+    	   	<fileset dir="${javadoc.dir}">
+    	 		<include name="**/**"/>
+    		</fileset>
+    	</scp>
+    </target>
+
+
+</project>
