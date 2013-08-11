@@ -1,10 +1,8 @@
 package junit;
 
-import org.af.jhlir.backends.biocep.RCallServicesBiocep;
 import org.af.jhlir.backends.rengine.RCallServicesREngine;
 import org.af.jhlir.call.RCallServices;
 import org.junit.Before;
-import org.kchine.r.server.DirectJNI;
 import org.rosuda.REngine.JRI.JRIEngine;
 
 
@@ -17,9 +15,6 @@ public abstract class MyTestCase {
     @Before
     public void setUp() throws Exception {
         if (rs == null) {
-            if (this.getClass().toString().startsWith("class junit.biocep")) {
-                rs = new RCallServicesBiocep(DirectJNI.getInstance().getRServices());
-            }
             if (this.getClass().toString().startsWith("class junit.JRI")) {
                 rs = new RCallServicesREngine(new JRIEngine());
             }
