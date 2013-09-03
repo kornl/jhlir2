@@ -37,20 +37,24 @@ public class RCallServicesREngine extends RCallServices {
     }
 
     private REngine rs;
-    private REXP globalEnv;
+    private REXP env;
     private List<String> history = new Vector<String>();
 
     public RCallServicesREngine(REngine rs) {
+    	this(rs, ".GlobalEnv");
+    }
+    
+    public RCallServicesREngine(REngine rs, String envir) {
         this.rs = rs;
         try {
-            globalEnv = rs.parseAndEval(".GlobalEnv");
+            env = rs.parseAndEval(envir);
         } catch (org.rosuda.REngine.REngineException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (REXPMismatchException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         try {
-            rs.parseAndEval("options(error = function() {" + ERROR_VAR + "<<- geterrmessage()})");
+            rs.parseAndEval("options(error = function() { assign(\"" + ERROR_VAR + "\", geterrmessage()})", env, true);
         } catch (org.rosuda.REngine.REngineException e) {
             throw new REngineException(e);
         } catch (REXPMismatchException e) {
@@ -79,7 +83,7 @@ public class RCallServicesREngine extends RCallServices {
     public REXP engineEval(String expression, boolean resolve) {
     	history.add(expression);
         try {
-            rs.parseAndEval(ERROR_VAR + " <<- NULL");
+            rs.parseAndEval(ERROR_VAR + " <<- NULL", env, true);
             //String expression2 = expression.replace("\"", "\\\"");
             //String s1 = "parse(text=\"" + expression2 + "\")";
             //System.out.println(s1);
@@ -89,8 +93,8 @@ public class RCallServicesREngine extends RCallServices {
                 String error = errRexp.asString();
                 throw new RErrorException(error);
             }*/
-            REXP res = rs.parseAndEval(expression, globalEnv, resolve);
-            REXP errRexp = rs.parseAndEval(ERROR_VAR);
+            REXP res = rs.parseAndEval(expression, env, resolve);
+            REXP errRexp = rs.parseAndEval(ERROR_VAR, env, true);
             if (!(errRexp instanceof REXPNull)) {
                 String error = errRexp.asString();
                 throw new RErrorException(error);
