@@ -12,18 +12,18 @@ import org.rosuda.REngine.REXPReference;
 public class RObjectREngine<WRAPPED_TYPE extends REXP, RESOLVED_TYPE extends REXP>
         implements RObj<WRAPPED_TYPE> {
 
-    protected RCallServicesREngine rs;
+    protected RCallServices rs;
     private RESOLVED_TYPE cached;
     private REXPReference ref;
 
-    protected RObjectREngine(RCallServicesREngine rs, WRAPPED_TYPE wrapped) {
+    protected RObjectREngine(RCallServices rs, WRAPPED_TYPE wrapped) {
         if (wrapped == null)
             throw new RuntimeException("Tried to create RObjectWrapper on null!");
         this.rs = rs;
         this.cached = (RESOLVED_TYPE) wrapped;
     }
 
-    protected RObjectREngine(RCallServicesREngine rs, REXPReference wrapped) {
+    protected RObjectREngine(RCallServices rs, REXPReference wrapped) {
         if (wrapped == null)
             throw new RuntimeException("Tried to create RObjectWrapper on null!");
         this.rs = rs;

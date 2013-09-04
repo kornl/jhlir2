@@ -1,7 +1,6 @@
 package junit;
 
-import org.af.jhlir.backends.rengine.RCallServicesREngine;
-import org.af.jhlir.call.RCallServices;
+import org.af.jhlir.backends.rengine.RCallServices;
 import org.junit.Before;
 import org.rosuda.REngine.JRI.JRIEngine;
 
@@ -16,7 +15,7 @@ public abstract class MyTestCase {
     public void setUp() throws Exception {
         if (rs == null) {
             if (this.getClass().toString().startsWith("class junit.JRI")) {
-                rs = new RCallServicesREngine(new JRIEngine());
+                rs = new RCallServices(new JRIEngine());
             }
         }
     }

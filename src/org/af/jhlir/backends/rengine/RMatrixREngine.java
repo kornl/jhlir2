@@ -12,7 +12,7 @@ public abstract class RMatrixREngine<WRAPPED_TYPE extends REXP, RESOLVED_TYPE ex
         extends RObjectREngine<WRAPPED_TYPE, RESOLVED_TYPE>
         implements RMatrix<WRAPPED_TYPE, ARR_TYPE, EL_TYPE> {
 
-    public RMatrixREngine(RCallServicesREngine rs, WRAPPED_TYPE wrapped) {
+    public RMatrixREngine(RCallServices rs, WRAPPED_TYPE wrapped) {
         super(rs, wrapped);
     }
 

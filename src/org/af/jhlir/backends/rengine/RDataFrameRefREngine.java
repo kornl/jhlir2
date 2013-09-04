@@ -8,7 +8,7 @@ public class RDataFrameRefREngine
         extends RDataFrameREngine
         implements RDataFrameRef<REXPReference, REXPGenericVector> {
 
-    public RDataFrameRefREngine(RCallServicesREngine rs, REXPReference wrapped) {
+    public RDataFrameRefREngine(RCallServices rs, REXPReference wrapped) {
         super(rs, wrapped);
     }
 }

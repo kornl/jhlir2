@@ -1,6 +1,5 @@
 package org.af.jhlir.backends.rengine;
 
-import org.af.jhlir.call.RCallServices;
 import org.af.jhlir.call.RLogical;
 import org.rosuda.REngine.REXPLogical;
 
@@ -8,7 +7,7 @@ public class RLogicalREngine
         extends RVectorREngine<REXPLogical, REXPLogical, boolean[], Boolean>
         implements RLogical<REXPLogical> {
 
-    public RLogicalREngine(RCallServicesREngine rs, org.rosuda.REngine.REXPLogical wrapped) {
+    public RLogicalREngine(RCallServices rs, org.rosuda.REngine.REXPLogical wrapped) {
         super(rs, wrapped);
     }
 

@@ -11,7 +11,7 @@ public class S3ObjREngine
         extends RObjectREngine<REXPGenericVector, REXPGenericVector>
         implements S3Obj<REXPGenericVector> {
 
-    public S3ObjREngine(RCallServicesREngine rs, REXPGenericVector wrapped) {
+    public S3ObjREngine(RCallServices rs, REXPGenericVector wrapped) {
         super(rs, wrapped);
     }
 

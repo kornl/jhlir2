@@ -9,7 +9,7 @@ import org.rosuda.REngine.REXP;
 
 public class S4ObjREngine extends RObjectREngine<REXP, REXP> implements S4Obj {
 
-    public S4ObjREngine(RCallServicesREngine rs, REXP wrapped) {
+    public S4ObjREngine(RCallServices rs, REXP wrapped) {
     	super(rs, wrapped);    	
     }
 

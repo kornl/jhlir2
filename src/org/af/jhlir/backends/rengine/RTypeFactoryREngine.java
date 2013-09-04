@@ -6,13 +6,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.rosuda.REngine.REXPDouble;
 
 public class RTypeFactoryREngine extends RTypeFactory{
-    private RCallServicesREngine rs;
+    private RCallServices rs;
 
-    public RTypeFactoryREngine(RCallServicesREngine rs) {
+    public RTypeFactoryREngine(RCallServices rs) {
         this.rs = rs;
     }
 
-    public static RTypeFactory getInstance(RCallServicesREngine rs) {
+    public static RTypeFactory getInstance(RCallServices rs) {
         return new RTypeFactoryREngine(rs);
     }
 

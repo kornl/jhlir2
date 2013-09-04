@@ -10,7 +10,7 @@ import org.rosuda.REngine.REXPString;
 abstract public class RVectorFactorREngine<WRAPPED_TYPE extends REXP, RESOLVED_TYPE extends REXP, ARR_TYPE, EL_TYPE>
         extends RObjectREngine<WRAPPED_TYPE, RESOLVED_TYPE> implements RVectorFactor<WRAPPED_TYPE, ARR_TYPE, EL_TYPE> {
 
-    protected RVectorFactorREngine(RCallServicesREngine rs, WRAPPED_TYPE wrapped) {
+    protected RVectorFactorREngine(RCallServices rs, WRAPPED_TYPE wrapped) {
         super(rs, wrapped);
     }
 

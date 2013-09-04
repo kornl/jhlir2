@@ -23,11 +23,11 @@ public class RDataFrameREngine
     implements RDataFrame<REXPGenericVector> {
 
     //todo: some row stuff, names, etc
-    public RDataFrameREngine(RCallServicesREngine rs, REXPGenericVector wrapped) {
+    public RDataFrameREngine(RCallServices rs, REXPGenericVector wrapped) {
         super(rs, wrapped);
     }
 
-    public RDataFrameREngine(RCallServicesREngine rs, REXPReference wrapped) {
+    public RDataFrameREngine(RCallServices rs, REXPReference wrapped) {
         super(rs, wrapped);
     }
 

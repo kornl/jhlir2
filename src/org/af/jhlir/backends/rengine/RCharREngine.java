@@ -1,16 +1,19 @@
 package org.af.jhlir.backends.rengine;
 
-import org.af.jhlir.call.RCallServices;
 import org.af.jhlir.call.RChar;
+import org.af.jhlir.call.RObj;
 import org.rosuda.REngine.REXPString;
 
-
+/**
+ * Interface for a RChar Object that extends RObj.
+ * @param <WRAPPED_TYPE> underlying type of the used back-end, see {@link RObj RObj}
+ */
 public class RCharREngine
         extends RVectorREngine<REXPString, REXPString, String[], String>
         implements RChar<REXPString> {
 
 
-    public RCharREngine(RCallServicesREngine rs, org.rosuda.REngine.REXPString wrapped) {
+    public RCharREngine(RCallServices rs, org.rosuda.REngine.REXPString wrapped) {
         super(rs, wrapped);
     }
 

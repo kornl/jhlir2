@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
-import org.af.jhlir.call.RCallServices;
 import org.af.jhlir.call.RChar;
 import org.af.jhlir.call.REngineException;
 import org.af.jhlir.call.RErrorException;
@@ -25,26 +24,35 @@ import org.rosuda.REngine.REXPReference;
 import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.REngine;
 
+//todo build in java streams?
+//todo handlers for warning and errors
 
-public class RCallServicesREngine extends RCallServices {
 
-    static {
-        RCallServices.NA_RINTEGER = Integer.MIN_VALUE;
-        RCallServices.NA_RNUMERIC = Double.NaN;
-        RCallServices.NA_RLOGICAL = null;
-        RCallServices.NA_CHAR = "NA";
-        RCallServices.NA_FACTOR = null;
-    }
+public class RCallServices {
 
-    private REngine rs;
-    private REXP env;
-    private List<String> history = new Vector<String>();
+	protected static final String WARNING_VAR = ".jhlir.warnings";
+	protected static final String ERROR_VAR = ".jhlir.errors";
 
-    public RCallServicesREngine(REngine rs) {
+	/** Integer value that codes a NA */
+	public static Integer NA_RINTEGER = Integer.MIN_VALUE;   
+	/** Double value that codes a NA */
+	public static Double NA_RNUMERIC = Double.NaN;
+	/** Boolean value that codes a NA */
+	public static Boolean NA_RLOGICAL = null;
+	/** String value that codes a NA for a character */
+	public static String NA_CHAR = "NA";
+	/** String value that codes a NA for a factor */
+	public static String NA_FACTOR = null;
+
+	private REngine rs;
+	private REXP env;
+	private List<String> history = new Vector<String>();
+
+    public RCallServices(REngine rs) {
     	this(rs, ".GlobalEnv");
     }
     
-    public RCallServicesREngine(REngine rs, String envir) {
+    public RCallServices(REngine rs, String envir) {
         this.rs = rs;
         try {
             env = rs.parseAndEval(envir);
@@ -66,15 +74,33 @@ public class RCallServicesREngine extends RCallServices {
         return rs;
     }
 
+    /**
+	 * Evaluates an expression.
+	 * @param expression
+	 * @throws REngineException
+	 */
     public void evalVoid(String expression) throws REngineException {    	
         engineEval(expression, true);
     }
 
+	
+    /**
+     * Evaluates an expression and returns the result.
+     * @param expression expression to be evaluated
+     * @return the result of evaluating the expression
+     * @throws REngineException
+     */
     public RObj eval(String expression) throws REngineException {
         REXP robj = engineEval(expression, true);
         return wrapObject(robj);
     }
 
+    /**
+     * Evaluates an expression and returns the result as a reference.
+     * @param expression expression to be evaluated
+     * @return a reference to the result of evaluating the expression
+     * @throws RemoteException
+     */
     public RRef evalAndGetRef(String expression) throws REngineException {
         REXPReference rr = (REXPReference) engineEval(expression, false);
         return wrapObject(rr);
@@ -108,7 +134,12 @@ public class RCallServicesREngine extends RCallServices {
         }
     }
 
-
+    /**
+     * Assigns the result of evaluating the expression to a variable.
+     * @param varName variable name that the result should be assigned to
+     * @param expression expression to be evaluated
+     * @throws RemoteException
+     */
     public void assign(String varName, String expression) throws RemoteException {
         evalVoid(varName + "<-" + expression);
     }
@@ -121,6 +152,13 @@ public class RCallServicesREngine extends RCallServices {
 
     //
 
+    /**
+     * Calls a function with the given arguments.
+     * The arguments can be of Type RObj ... TODO What is allowed to pass here? 
+     * @param function name of the function to be called
+     * @param args arguments to be part of the call
+     * @throws RemoteException
+     */
     public RObj call(String function, Object... args) {
     	String argStr = "";
         for (Object o : args) {
@@ -250,7 +288,13 @@ public class RCallServicesREngine extends RCallServices {
     	return null;
     }
 
-    @Override
+    /**
+     * If there was generated at least one warning on R side by the last {@code eval}, 
+     * {@code evalVoid}, {@code evalAndGetRef},{@code assign}, {@code call} 
+     * or {@code put} command, this method returns the warnings.
+     * Otherwise it returns null. 
+     * @return the warnings and null if no warning was generated. 
+     */
     public String[] getWarning() {
         String[] warning;
         try {
@@ -264,27 +308,22 @@ public class RCallServicesREngine extends RCallServices {
         return null;
     }
 
-	@Override
 	public RNumeric createRObject(double[] val) {		
 		return new RNumericREngine(this, new REXPDouble(val));
 	}
 
-	@Override
 	public RInteger createRObject(int[] val) {		
 		return new RIntegerREngine(this, new REXPInteger(val));
 	}
 
-	@Override
 	public RChar createRObject(String[] val) {
 		return new RCharREngine(this, new REXPString(val));
 	}
 
-	@Override
 	public RLogical createRObject(boolean[] val) {
 		return new RLogicalREngine(this, new REXPLogical(val));
 	}
 
-	@Override
 	public List<String> getHistory() {		
 		return history;
 	}
